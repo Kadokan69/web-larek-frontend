@@ -18,11 +18,11 @@ export interface IOrder{
   phone: string;
   address: string;
   total: number;
-  items: TCardId[];
+  items: TProductItemId[];
 }
 
 export type TCatalogItems = Pick<IProductItem, "category"|"title"|"image"|"price">
 
 export type TBasketItems = Pick<IProductItem, "title"|"price">
 
-export type TCardId = Pick<IProductItem, "id">
+export type TProductItemId = Pick<IProductItem, "id">
