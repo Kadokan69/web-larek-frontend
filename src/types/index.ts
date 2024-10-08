@@ -26,3 +26,9 @@ export type TCatalogItems = Pick<IProductItem, "category"|"title"|"image"|"price
 export type TBasketItems = Pick<IProductItem, "title"|"price">
 
 export type TProductItemId = Pick<IProductItem, "id">
+
+export type TOrderForm = Pick<IOrder, "payment"|"address">
+
+export type TOrderContact = Pick<IOrder, "email"|"phone">
+
+export type TOrderSucsess = Pick<IOrder, "total">
