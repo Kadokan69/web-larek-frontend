@@ -1,8 +1,3 @@
-export interface IProductList{
-  total: number;
-  items: IProductItem[];
-}
-
 export interface IProductItem{
   id: string;
   description: string;
@@ -21,14 +16,26 @@ export interface IOrder{
   items: TProductItemId[];
 }
 
+export interface IProductData{
+  total: number;
+  products: IProductItem[];
+  preview: string | null;
+  getProduct(productId: string): IProductItem;
+}
+
+export interface IOrderData{
+  setOrder(dataOrder: IOrder): void;
+  getOrder(): IOrder;
+  checkValidation(data: Record<keyof TOrderForm, string>): boolean;
+}
+
+
 export type TCatalogItems = Pick<IProductItem, "category"|"title"|"image"|"price">
 
 export type TBasketItems = Pick<IProductItem, "title"|"price">
 
 export type TProductItemId = Pick<IProductItem, "id">
 
-export type TOrderForm = Pick<IOrder, "payment"|"address">
-
-export type TOrderContact = Pick<IOrder, "email"|"phone">
+export type TOrderForm = Pick<IOrder, "payment"|"address"|"email"|"phone">
 
 export type TOrderSucsess = Pick<IOrder, "total">
