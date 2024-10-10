@@ -4,7 +4,7 @@ export interface IProductItem{
   image: string;
   title: string;
   category: string;
-  price: number;
+  price: number | null;
 }
 
 export interface IOrder{
@@ -23,19 +23,11 @@ export interface IProductData{
   getProduct(productId: string): IProductItem;
 }
 
-export interface IOrderData{
-  setOrder(dataOrder: IOrder): void;
-  getOrder(): IOrder;
-  checkValidation(data: Record<keyof TOrderForm, string>): boolean;
-}
-
 
 export type TCatalogItems = Pick<IProductItem, "category"|"title"|"image"|"price">
 
-export type TBasketItems = Pick<IProductItem, "title"|"price">
+export type TBasketItems = Pick<IProductItem, "id"|"title"|"price">
 
 export type TProductItemId = Pick<IProductItem, "id">
 
 export type TOrderForm = Pick<IOrder, "payment"|"address"|"email"|"phone">
-
-export type TOrderSucsess = Pick<IOrder, "total">
