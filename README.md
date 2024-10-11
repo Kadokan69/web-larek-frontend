@@ -76,6 +76,7 @@ interface IProductData{
   products: IProductItem[];
   preview: string | null;
   getProduct(productId: string): IProductItem;
+  
 }
 ```
 
@@ -138,8 +139,9 @@ type TProductItemId = Pick<IProductItem, "id">
 - events: IEvents - экземпляр класса `EventEmitter` для инициации событий.
 
 Так же класс предоставляет набор методов для взаимодействия с этими данными\
+- setProduct(product:IProductItem)
 - getProduct(productId: string): IProductItem; - возвращает карточку товара по ее id
-- геттеры для получения данных из полей класса
+- сеттеры и геттеры для сохранения и получения данных из полей класса
 
 #### Класс OrderData
 Класс отвечающий за хранение данных с формы и логику работы с ними\
@@ -233,7 +235,7 @@ type TProductItemId = Pick<IProductItem, "id">
 Поля класса содержат элементы разметки элементов карточки. Конструктор, кроме темплейта принимает экземпляр `EventEmitter` для инициации событий.\
 Полях класса:
 - description?: HTMLElement - Элемент с описание товара
-- image?: HTMLElement - Элемент с изображением товара
+- image?: HTMLImageElement - Элемент с изображением товара
 - title: HTMLElement - Элемент с названием товара
 - category?: HTMLElement - Элемент с категорией товара 
 - price: HTMLElement - Элемент с ценой товара

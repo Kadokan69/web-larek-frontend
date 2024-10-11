@@ -13,14 +13,14 @@ export interface IOrder{
   phone: string;
   address: string;
   total: number;
-  items: TProductItemId[];
+  items: string[];
 }
 
 export interface IProductData{
   total: number;
-  products: IProductItem[];
-  preview: string | null;
-  getProduct(productId: string): IProductItem;
+  items: IProductItem[];
+  preview?: string | null;
+  // getProduct(productId: string): IProductItem;
 }
 
 
@@ -31,3 +31,11 @@ export type TBasketItems = Pick<IProductItem, "id"|"title"|"price">
 export type TProductItemId = Pick<IProductItem, "id">
 
 export type TOrderForm = Pick<IOrder, "payment"|"address"|"email"|"phone">
+
+export type TApiPostMethod = 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+
+export interface IApi {
+  baseUrl: string;
+  get<T>(uri: string): Promise<T>;
+  post<T>(uri: string, data: object, method?: TApiPostMethod): Promise<T>;
+}
