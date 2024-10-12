@@ -1,11 +1,10 @@
 import { IProductItem } from "../types";
-import { cloneTemplate } from "../utils/utils";
+import { cloneTemplate, ensureElement } from "../utils/utils";
 import { Component } from "./base/Component";
 import { IEvents } from "./base/events"
 
 export class Product extends Component<IProductItem>{
 
-    protected events: IEvents;
     protected _description?: HTMLElement;
     protected _image?: HTMLImageElement;
     protected _title: HTMLElement;
@@ -14,9 +13,8 @@ export class Product extends Component<IProductItem>{
     protected _button?: HTMLButtonElement;
     protected _id: string;
 
-    constructor(protected container: HTMLElement, events: IEvents){
+    constructor(protected container: HTMLElement,protected events: IEvents){
         super(container)
-        this.events = events;
 
         this._description = this.container.querySelector('.card__text');
         this._image = this.container.querySelector('.card__image');

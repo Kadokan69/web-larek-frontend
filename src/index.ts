@@ -7,7 +7,7 @@ import { Page } from './components/Page';
 import { Product } from './components/Product';
 import { ProductData } from './components/ProductData';
 import './scss/styles.scss';
-import { IApi, IOrder } from './types';
+import { IApi, IOrder, IProductItem } from './types';
 import { API_URL, CDN_URL ,settings } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
 
@@ -24,10 +24,16 @@ const orderData = new OrderData(events)
 
 const productTemplateCatalog: HTMLTemplateElement = document.querySelector('#card-catalog');
 const pageElement: HTMLElement = document.querySelector('.page')
-const successElemant = ensureElement<HTMLElement>('#success')
+const modalElement: HTMLElement = document.querySelector('#modal-container')
+const successTemplate: HTMLTemplateElement = document.querySelector('#success')
+const basketTemplate: HTMLTemplateElement = document.querySelector('#basket')
+const orderTemplate: HTMLTemplateElement = document.querySelector('#order')
+const contactsTemplate: HTMLTemplateElement = document.querySelector('#contacts')
+const productBasketTemplate: HTMLTemplateElement = document.querySelector('#card-basket')
+const productPreviewTemplate: HTMLTemplateElement = document.querySelector('#card-preview')
 const page = new Page(pageElement, events)
-const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
-console.log(modal);
+const modal = new Modal(modalElement, events);
+console.log(modal.content);
 
 
 
@@ -53,9 +59,27 @@ events.on('initialData: loaded', () => {
     page.render({catalog: productArray})
 })
 
-events.on('product:select', modal.open)
+events.on('product:select', (data: {product: IProductItem}) => {
+    const productItem = new Product(cloneTemplate(productPreviewTemplate), events)
+    const { product } = data;
+    const id = productData.getProduct(product.id);
+    console.log(productItem.render(id));
+    modal.render({content: productItem.render(id)})
+    
+})
 
-events.on('basket:open', modal.render)
+// Блокируем прокрутку страницы если открыта модалка
+events.on('modal:open', () => {
+    page.locked = true;
+});
+
+// ... и разблокируем
+events.on('modal:close', () => {
+    page.locked = false;
+});
+
+// events.on('basket:open', modal.render(
+// ))
 
 
 

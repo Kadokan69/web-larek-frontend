@@ -33,6 +33,14 @@ export class Page extends Component<IPage>{
         this._counter.textContent = total;
     }
 
+    set locked(value: boolean) {
+        if (value) {
+            this.container.classList.add('page__wrapper_locked');
+        } else {
+            this.container.classList.remove('page__wrapper_locked');
+        }
+    }
+
     
 
 }

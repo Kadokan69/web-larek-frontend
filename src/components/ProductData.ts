@@ -11,6 +11,10 @@ export class ProductData implements IProductData {
         this.events = events;
     }
 
+    getProduct(productId: string) {
+        return this.items.find((item) => item.id === productId)
+    }
+
     set productCard(data: IProductItem[]){
         this.items = data
         this.events.emit('product:load')
