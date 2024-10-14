@@ -2,6 +2,7 @@ import { AppApi } from './components/AppApi';
 import { Api } from './components/base/api';
 import { IEvents, EventEmitter } from './components/base/events';
 import { Modal } from './components/common/Modal';
+import { ModalBasket } from './components/ModalBasket';
 import { OrderData } from './components/OrderData';
 import { Page } from './components/Page';
 import { Product } from './components/Product';
@@ -30,6 +31,7 @@ const productPreviewTemplate: HTMLTemplateElement = document.querySelector('#car
 const page = new Page(pageElement, events);
 const modal = new Modal(modalElement, events);
 const order = new OrderData(events);
+const basket = new ModalBasket(cloneTemplate(basketTemplate), events);
 console.log(modal.content);
 
 events.onAll((event: { eventName: any; data: any }) => {
@@ -48,8 +50,8 @@ events.on('initialData: loaded', () => {
 		const productInstans = new Product(cloneTemplate(productTemplateCatalog), events);
 		return productInstans.render(item);
 	});
-    console.log(productData.productCard);
-    
+	console.log(productData.productCard);
+
 	page.render({ catalog: productArray });
 });
 
@@ -67,9 +69,9 @@ events.on('product:submit', (data: { product: IProductItem }) => {
 });
 
 //Количество товаров в кнопк корзина
-events.on('orderItems:change', (data: {product: string[]}) => {
-    page.counter = String(data.product.length)
-})
+events.on('orderItems:change', (data: { product: string[] }) => {
+	page.counter = String(data.product.length);
+});
 
 // Блокируем прокрутку страницы если открыта модалка
 events.on('modal:open', () => {
@@ -81,17 +83,27 @@ events.on('modal:close', () => {
 	page.locked = false;
 });
 
-
 // Добавление товра в корзину
-//ToDo: Разработать компанент для корзины
+
+// Корзина
 events.on('basket:open', () => {
-    if(order.items){
-    const arr = order.items.map((item) => {
-    const productItem = new Product(cloneTemplate(productBasketTemplate), events);
-	return productItem.render(productData.getProduct(item));
-    })
-    arr.forEach((i) => {console.log(i);
-     modal.render({content: i})})
-    
-    }
+	if (order.items) {
+		let total = 0;
+		const arr = order.items.map((item) => {
+			const productItem = new Product(cloneTemplate(productBasketTemplate), events);
+			productItem.index = order.items.indexOf(item) + 1;
+			total = total + productData.getProduct(item).price;
+			basket.total = total;
+			console.log(productData.getProduct(item).price);
+			
+			return productItem.render(productData.getProduct(item));
+		});
+		
+		modal.render({ content: basket.render({ catalog: arr }) });
+	}
+});
+
+events.on('basket:delete', (data: { product: IProductItem }) => {
+	const arr = order.items.filter((id) => id !== data.product.id);
+	order.items = arr;
 })

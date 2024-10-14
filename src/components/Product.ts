@@ -12,7 +12,9 @@ export class Product extends Component<IProductItem> {
 	protected _price: HTMLElement;
 	protected _button?: HTMLButtonElement;
 	protected _id: string;
-    events: IEvents
+	protected _index?: HTMLElement;
+	protected _delete?: HTMLElement;
+  events: IEvents
 
 	constructor(protected container: HTMLElement, events: IEvents) {
 		super(container);
@@ -23,6 +25,9 @@ export class Product extends Component<IProductItem> {
 		this._category = this.container.querySelector('.card__category');
 		this._price = this.container.querySelector('.card__price');
 		this._button = this.container.querySelector('.button');
+		this._index = this.container.querySelector('.basket__item-index')
+		this._delete = this.container.querySelector('.basket__item-delete')
+
 		if (this.container instanceof HTMLButtonElement) {
 			this.container.addEventListener('click', () => {
 				this.events.emit('product:select', { product: this });
@@ -35,6 +40,12 @@ export class Product extends Component<IProductItem> {
 			});
             this.events.on('product:submit', () => this._button.disabled = true)
             
+		}
+
+		if(this._delete) {
+			this._delete.addEventListener('click', () => {
+				this.events.emit('basket:delete', { product: this });
+			})
 		}
         
         
@@ -76,6 +87,10 @@ export class Product extends Component<IProductItem> {
 		this._description.textContent = description;
 	}
 
+	set index(index: number) {
+		this._index.textContent = String(index)
+	}
+
 	set id(id: string) {
 		this._id = id;
 	}
@@ -83,6 +98,7 @@ export class Product extends Component<IProductItem> {
 	get id() {
 		return this._id;
 	}
+	
 
    
 }

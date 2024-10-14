@@ -25,8 +25,6 @@ export class OrderData implements IOrder {
 			this.items.push(items);
             this.events.emit("orderItems:change", { product: this.items })
 		}
-
-		console.log(this.items);
 	}
 
 	set _payment(payment: string) {
