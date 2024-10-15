@@ -31,6 +31,10 @@ export class OrderData implements IOrder {
 		this.payment = payment;
 	}
 
+	set _address(address: string){
+		this.address = address;
+	}
+
 	getOrder() {
 		return {
 			payment: this.payment,

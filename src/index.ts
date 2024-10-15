@@ -3,6 +3,7 @@ import { Api } from './components/base/api';
 import { IEvents, EventEmitter } from './components/base/events';
 import { Modal } from './components/common/Modal';
 import { ModalBasket } from './components/ModalBasket';
+import { Order } from './components/Order';
 import { OrderData } from './components/OrderData';
 import { Page } from './components/Page';
 import { Product } from './components/Product';
@@ -68,7 +69,7 @@ events.on('product:submit', (data: { product: IProductItem }) => {
 	order._items = data.product.id;
 });
 
-//Количество товаров в кнопк корзина
+//Количество товаров в кнопке корзина
 events.on('orderItems:change', (data: { product: string[] }) => {
 	page.counter = String(data.product.length);
 });
@@ -83,9 +84,11 @@ events.on('modal:close', () => {
 	page.locked = false;
 });
 
-// Добавление товра в корзину
+
 
 // Корзина
+
+// Добавление товра в корзину
 events.on('basket:open', () => {
 	if (order.items) {
 		let total = 0;
@@ -103,7 +106,42 @@ events.on('basket:open', () => {
 	}
 });
 
-events.on('basket:delete', (data: { product: IProductItem }) => {
-	const arr = order.items.filter((id) => id !== data.product.id);
-	order.items = arr;
+//Удаление товара из корзины
+events.on('basket:delete', (data:{ product: IProductItem } ) => {
+		const arri = order.items.filter(item => item !== data.product.id)
+		order.items = arri
+		
+		let total = 0;
+		const arr = order.items.map((item) => {
+			const productItem = new Product(cloneTemplate(productBasketTemplate), events);
+			productItem.index = order.items.indexOf(item) + 1;
+			total = total + productData.getProduct(item).price;
+			basket.total = total;
+			console.log(productData.getProduct(item).price);
+			
+			return productItem.render(productData.getProduct(item));
+		});
+		
+		modal.render({ content: basket.render({ catalog: arr }) });
+		events.emit('orderItems:change', ({product: order.items}))
 })
+
+//Форма оформления заказа
+
+events.on('basket:submit', () => {
+	const orderForem = new Order(cloneTemplate(orderTemplate), events)
+	modal.render({content: orderForem.render()})
+})
+
+
+events.on('payment:change', (data:{item: string}) => {
+	order._payment = data.item;
+})
+
+events.on('order:submit', (data:{ address: string}) => {
+	order._address = data.address;
+	console.log(order);
+	
+})
+
+//Форма контакты

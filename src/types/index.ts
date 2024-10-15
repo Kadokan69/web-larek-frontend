@@ -30,7 +30,7 @@ export type TBasketItems = Pick<IProductItem, "id"|"title"|"price">
 
 export type TProductItemId = Pick<IProductItem, "id">
 
-export type TOrderForm = Pick<IOrder, "payment"|"address"|"email"|"phone">
+export type TOrderForm = Pick<IOrder, "payment"|"address">
 
 export type TApiPostMethod = 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
