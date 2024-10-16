@@ -27,16 +27,8 @@ export abstract class Form<T> extends Component<T>{
 			const field = target.name;
 			const value = target.value;
 			this.events.emit(`${this.formName}:input`, { field, value });
-      if(this._inputs.values){
-        this.submitButton.disabled = false;
-      }else{
-        this.submitButton.disabled = true;
-      }
-      
 		});
-
-    
-
+ 
   }
   protected getInputValues() {
 		const valuesObject: Record<string, string> = {};
@@ -45,6 +37,8 @@ export abstract class Form<T> extends Component<T>{
 		});
 		return valuesObject;
 	}
+
+  
 
 
 }
