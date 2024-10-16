@@ -3,11 +3,11 @@ import { Component } from "./base/Component";
 import { IEvents } from "./base/events";
 import { Modal } from "./common/Modal";
 
-interface IOrederi{
+interface IOrederForm{
   content: HTMLElement;
 }
 
-export class Order extends Component<IOrederi>{
+export class Order extends Component<IOrederForm>{
   protected _form: HTMLFormElement;
   protected _payment: NodeListOf<HTMLButtonElement>;
   protected _address: HTMLElement;

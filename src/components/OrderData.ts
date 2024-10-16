@@ -35,6 +35,18 @@ export class OrderData implements IOrder {
 		this.address = address;
 	}
 
+	set _email(email: string){
+		this.email = email;
+	}
+
+	set _phone(phone: string){
+		this.phone = phone;
+	}
+
+	set _total(total: number){
+		this.total = total;
+	}
+
 	getOrder() {
 		return {
 			payment: this.payment,

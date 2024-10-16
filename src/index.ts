@@ -3,7 +3,7 @@ import { Api } from './components/base/api';
 import { IEvents, EventEmitter } from './components/base/events';
 import { Modal } from './components/common/Modal';
 import { ModalBasket } from './components/ModalBasket';
-import { Order } from './components/Order';
+import { Order } from './components/OrderForm';
 import { OrderData } from './components/OrderData';
 import { Page } from './components/Page';
 import { Product } from './components/Product';
@@ -12,6 +12,8 @@ import './scss/styles.scss';
 import { IApi, IOrder, IProductItem } from './types';
 import { API_URL, CDN_URL, settings } from './utils/constants';
 import { cloneTemplate, ensureElement } from './utils/utils';
+import { ContactForm } from './components/ContactForm';
+import { Success } from './components/Success';
 
 const events: IEvents = new EventEmitter();
 
@@ -84,8 +86,6 @@ events.on('modal:close', () => {
 	page.locked = false;
 });
 
-
-
 // Корзина
 
 // Добавление товра в корзину
@@ -97,51 +97,70 @@ events.on('basket:open', () => {
 			productItem.index = order.items.indexOf(item) + 1;
 			total = total + productData.getProduct(item).price;
 			basket.total = total;
-			console.log(productData.getProduct(item).price);
-			
+			order._total = total;
+
 			return productItem.render(productData.getProduct(item));
 		});
-		
+
 		modal.render({ content: basket.render({ catalog: arr }) });
 	}
 });
 
 //Удаление товара из корзины
-events.on('basket:delete', (data:{ product: IProductItem } ) => {
-		const arri = order.items.filter(item => item !== data.product.id)
-		order.items = arri
-		
-		let total = 0;
-		const arr = order.items.map((item) => {
-			const productItem = new Product(cloneTemplate(productBasketTemplate), events);
-			productItem.index = order.items.indexOf(item) + 1;
-			total = total + productData.getProduct(item).price;
-			basket.total = total;
-			console.log(productData.getProduct(item).price);
-			
-			return productItem.render(productData.getProduct(item));
-		});
-		
-		modal.render({ content: basket.render({ catalog: arr }) });
-		events.emit('orderItems:change', ({product: order.items}))
-})
+events.on('basket:delete', (data: { product: IProductItem }) => {
+	const arri = order.items.filter((item) => item !== data.product.id);
+	order.items = arri;
+
+	let total = 0;
+	const arr = order.items.map((item) => {
+		const productItem = new Product(cloneTemplate(productBasketTemplate), events);
+		productItem.index = order.items.indexOf(item) + 1;
+		total = total + productData.getProduct(item).price;
+		basket.total = total;
+		order._total = total;
+		return productItem.render(productData.getProduct(item));
+	});
+
+	modal.render({ content: basket.render({ catalog: arr }) });
+	events.emit('orderItems:change', { product: order.items });
+});
 
 //Форма оформления заказа
 
 events.on('basket:submit', () => {
-	const orderForem = new Order(cloneTemplate(orderTemplate), events)
-	modal.render({content: orderForem.render()})
-})
+	const orderForem = new Order(cloneTemplate(orderTemplate), events);
+	modal.render({ content: orderForem.render() });
+});
 
-
-events.on('payment:change', (data:{item: string}) => {
+events.on('payment:change', (data: { item: string }) => {
 	order._payment = data.item;
-})
+});
 
-events.on('order:submit', (data:{ address: string}) => {
+events.on('order:submit', (data: { address: string }) => {
 	order._address = data.address;
-	console.log(order);
-	
-})
+	const contact = new ContactForm(cloneTemplate(contactsTemplate), events);
+	modal.render({ content: contact.render() });
+});
 
 //Форма контакты
+events.on('contacts:submit', (data: { email: string; phone: string }) => {
+	order._email = data.email;
+	order._phone = data.phone;
+	api
+		.setOrder(order.getOrder())
+		.then((res) => {
+			modal.close();
+			events.emit('order:success', res);
+		})
+		.catch((err) => console.error(err));
+});
+
+//Форма подтверждения
+events.on('order:success', (data: { id: string; total: number }) => {
+	const success = new Success(cloneTemplate(successTemplate), events);
+	success.total = data.total;
+	modal.render({ content: success.render() });
+});
+
+//Закрыть форму подтверждения
+events.on('success:submit', () => modal.close())
