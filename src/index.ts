@@ -46,7 +46,7 @@ api.getProduct().then((res) => {
 	productData.productCard = res;
 	events.emit('initialData: loaded');
 });
-// api.setOrder(order.getOrder()).then(res => console.log(res)).catch(err => console.error(err))
+
 
 events.on('initialData: loaded', () => {
 	const productArray = productData.productCard.map((item) => {
