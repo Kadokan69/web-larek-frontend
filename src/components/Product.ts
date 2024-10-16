@@ -14,19 +14,19 @@ export class Product extends Component<IProductItem> {
 	protected _id: string;
 	protected _index?: HTMLElement;
 	protected _delete?: HTMLElement;
-  events: IEvents
+	events: IEvents;
 
 	constructor(protected container: HTMLElement, events: IEvents) {
 		super(container);
-        this.events = events;
+		this.events = events;
 		this._description = this.container.querySelector('.card__text');
 		this._image = this.container.querySelector('.card__image');
 		this._title = this.container.querySelector('.card__title');
 		this._category = this.container.querySelector('.card__category');
 		this._price = this.container.querySelector('.card__price');
 		this._button = this.container.querySelector('.button');
-		this._index = this.container.querySelector('.basket__item-index')
-		this._delete = this.container.querySelector('.basket__item-delete')
+		this._index = this.container.querySelector('.basket__item-index');
+		this._delete = this.container.querySelector('.basket__item-delete');
 
 		if (this.container instanceof HTMLButtonElement) {
 			this.container.addEventListener('click', () => {
@@ -38,31 +38,28 @@ export class Product extends Component<IProductItem> {
 			this._button.addEventListener('click', () => {
 				this.events.emit('product:submit', { product: this });
 			});
-            this.events.on('product:submit', () => this._button.disabled = true)
-            
+			this.events.on('product:submit', () => (this._button.disabled = true));
 		}
 
-		if(this._delete) {
+		if (this._delete) {
 			this._delete.addEventListener('click', () => {
 				this.events.emit('basket:delete', { product: this });
-			})
+			});
 		}
-        
-        
 	}
-    
 
 	render(productData: Partial<IProductItem>) {
 		if (!productData) return this.container;
 
 		const { description, image, ...data } = productData;
-		if (this._image) this._image.src = image, this._image.alt = data.title ;
+		if (this._image) (this._image.src = image), (this._image.alt = data.title);
 		return super.render(data);
 	}
 
 	set price(price: number) {
 		if (price === null) {
 			this._price.textContent = `Бесценно`;
+			if (this._button) this._button.disabled = true;
 		} else {
 			this._price.textContent = `${String(price)} синапсов`;
 		}
@@ -70,8 +67,7 @@ export class Product extends Component<IProductItem> {
 
 	set title(title: string) {
 		this._title.textContent = title;
-        console.log(title);
-        
+		console.log(title);
 	}
 
 	set image({ image, title }: { image: string; title: string }) {
@@ -80,7 +76,7 @@ export class Product extends Component<IProductItem> {
 	}
 
 	set category(category: string) {
-        if(this._category)this._category.textContent = category;
+		if (this._category) this._category.textContent = category;
 	}
 
 	set description(description: string) {
@@ -88,7 +84,7 @@ export class Product extends Component<IProductItem> {
 	}
 
 	set index(index: number) {
-		this._index.textContent = String(index)
+		this._index.textContent = String(index);
 	}
 
 	set id(id: string) {
@@ -98,7 +94,4 @@ export class Product extends Component<IProductItem> {
 	get id() {
 		return this._id;
 	}
-	
-
-   
 }

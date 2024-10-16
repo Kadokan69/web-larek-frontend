@@ -20,7 +20,7 @@ const events: IEvents = new EventEmitter();
 const api = new AppApi(CDN_URL, API_URL);
 
 const productData = new ProductData(events);
-const orderData = new OrderData(events);
+const order = new OrderData(events);
 
 const productTemplateCatalog: HTMLTemplateElement = document.querySelector('#card-catalog');
 const pageElement: HTMLElement = document.querySelector('.page');
@@ -33,9 +33,8 @@ const productBasketTemplate: HTMLTemplateElement = document.querySelector('#card
 const productPreviewTemplate: HTMLTemplateElement = document.querySelector('#card-preview');
 const page = new Page(pageElement, events);
 const modal = new Modal(modalElement, events);
-const order = new OrderData(events);
+
 const basket = new ModalBasket(cloneTemplate(basketTemplate), events);
-console.log(modal.content);
 
 events.onAll((event: { eventName: any; data: any }) => {
 	console.log(event.eventName, event.data);
@@ -46,7 +45,6 @@ api.getProduct().then((res) => {
 	productData.productCard = res;
 	events.emit('initialData: loaded');
 });
-
 
 events.on('initialData: loaded', () => {
 	const productArray = productData.productCard.map((item) => {
@@ -68,7 +66,7 @@ events.on('product:select', (data: { product: IProductItem }) => {
 
 //Добавление товара в корзину
 events.on('product:submit', (data: { product: IProductItem }) => {
-	order._items = data.product.id;
+	order.setItems(data.product.id);
 });
 
 //Количество товаров в кнопке корзина
@@ -90,14 +88,14 @@ events.on('modal:close', () => {
 
 // Добавление товра в корзину
 events.on('basket:open', () => {
-	if (order.items) {
+	if (order.getItems()) {
 		let total = 0;
-		const arr = order.items.map((item) => {
+		const arr = order.getItems().map((item) => {
 			const productItem = new Product(cloneTemplate(productBasketTemplate), events);
-			productItem.index = order.items.indexOf(item) + 1;
+			productItem.index = order.getItems().indexOf(item) + 1;
 			total = total + productData.getProduct(item).price;
-			basket.total = total;
-			order._total = total;
+			order.setTotal(total);
+			basket.total = order._total;
 
 			return productItem.render(productData.getProduct(item));
 		});
@@ -108,21 +106,21 @@ events.on('basket:open', () => {
 
 //Удаление товара из корзины
 events.on('basket:delete', (data: { product: IProductItem }) => {
-	const arri = order.items.filter((item) => item !== data.product.id);
-	order.items = arri;
+	const arri = order.getItems().filter((item) => item !== data.product.id);
+	// order.setItems(arri);
 
 	let total = 0;
-	const arr = order.items.map((item) => {
+	const arr = order.getItems().map((item) => {
 		const productItem = new Product(cloneTemplate(productBasketTemplate), events);
-		productItem.index = order.items.indexOf(item) + 1;
+		productItem.index = order.getItems().indexOf(item) + 1;
 		total = total + productData.getProduct(item).price;
-		basket.total = total;
-		order._total = total;
+		order.setTotal(total);
+		basket.total = order._total;
 		return productItem.render(productData.getProduct(item));
 	});
 
 	modal.render({ content: basket.render({ catalog: arr }) });
-	events.emit('orderItems:change', { product: order.items });
+	events.emit('orderItems:change', { product: order.getItems() });
 });
 
 //Форма оформления заказа
@@ -163,4 +161,4 @@ events.on('order:success', (data: { id: string; total: number }) => {
 });
 
 //Закрыть форму подтверждения
-events.on('success:submit', () => modal.close())
+events.on('success:submit', () => modal.close());

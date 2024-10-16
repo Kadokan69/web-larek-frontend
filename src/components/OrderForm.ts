@@ -14,8 +14,7 @@ export class Order extends Form<IOrederForm>{
     super(container, events);
     this._payment = this.container.querySelectorAll('.button_alt');
     
-    this._payment.forEach(item => item.addEventListener('click', (evt) => {
-      evt.preventDefault();
+    this._payment.forEach(item => item.addEventListener('click', () => {
       const name = item.name
       this.events.emit(`payment:change`,  {item: name}  );
     }))

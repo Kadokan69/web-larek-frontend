@@ -28,7 +28,7 @@ export class ModalBasket extends Component<IModalBasket>{
 	}
 
   set total(total: number){
-    this._basketPrice.textContent = String(total);
+    this._basketPrice.textContent = `${String(total)} синапсов`;
   }
 
   deleteItems(id:HTMLElement){
