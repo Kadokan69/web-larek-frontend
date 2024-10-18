@@ -14,11 +14,11 @@ export class Product extends Component<IProductItem> {
 	protected _id: string;
 	protected _index?: HTMLElement;
 	protected _delete?: HTMLElement;
-	events: IEvents;
+	protected _inBasket?: boolean;
+	
 
-	constructor(protected container: HTMLElement, events: IEvents) {
+	constructor(protected container: HTMLElement,protected events: IEvents) {
 		super(container);
-		this.events = events;
 		this._description = this.container.querySelector('.card__text');
 		this._image = this.container.querySelector('.card__image');
 		this._title = this.container.querySelector('.card__title');
@@ -30,20 +30,19 @@ export class Product extends Component<IProductItem> {
 
 		if (this.container instanceof HTMLButtonElement) {
 			this.container.addEventListener('click', () => {
-				this.events.emit('product:select', { product: this });
+				this.events.emit('product:select', { id: this._id });
 			});
 		}
 
 		if (this._button) {
 			this._button.addEventListener('click', () => {
-				this.events.emit('product:submit', { product: this });
+				this.events.emit('product:submit', { id: this._id });
 			});
-			this.events.on('product:submit', () => (this._button.disabled = true));
 		}
 
 		if (this._delete) {
 			this._delete.addEventListener('click', () => {
-				this.events.emit('basket:delete', { product: this });
+				this.events.emit('basket:delete', { id: this._id });
 			});
 		}
 	}
@@ -51,11 +50,35 @@ export class Product extends Component<IProductItem> {
 	render(productData: Partial<IProductItem>) {
 		if (!productData) return this.container;
 
-		const { description, image, ...data } = productData;
+		const { description, image, category, inBasket, ...data } = productData;
 		if (this._image) (this._image.src = image), (this._image.alt = data.title);
+		if(this._category){
+			this._category.textContent = category;
+		switch (category) {
+			case 'софт-скил':
+				this._category.classList.add('card__category_soft')
+				break;
+			case 'дополнительное':
+				this._category.classList.add('card__category_additional')
+				break;
+			case 'кнопка':
+				this._category.classList.add('card__category_button')
+				break;
+			case 'хард-скил':
+				this._category.classList.add('card__category_hard')
+				break;
+			default:
+				this._category.classList.add('card__category_other')
+				break;
+		}
+		};
+		if(inBasket){
+			if(this._button) this._button.disabled = true;
+		}
+		
 		return super.render(data);
 	}
-
+	
 	set price(price: number) {
 		if (price === null) {
 			this._price.textContent = `Бесценно`;
@@ -65,33 +88,41 @@ export class Product extends Component<IProductItem> {
 		}
 	}
 
+	set index(index: number){
+		this._index.textContent = String(index + 1);
+	}
+
 	set title(title: string) {
 		this._title.textContent = title;
-		console.log(title);
 	}
 
-	set image({ image, title }: { image: string; title: string }) {
-		this._image.src = image;
-		this._image.alt = title;
-	}
+	
+	// set category(category: string) {
+	// 	this._category.textContent = category;
+	// 	switch (category) {
+	// 		case 'софт-скил':
+	// 			this._category.classList.add('card__category_soft')
+	// 			break;
+	// 		case 'дополнительное':
+	// 			this._category.classList.add('card__category_additional')
+	// 			break;
+	// 		case 'кнопка':
+	// 			this._category.classList.add('card__category_button')
+	// 			break;
+	// 		case 'хард-скил':
+	// 			this._category.classList.add('card__category_hard')
+	// 			break;
+	// 		default:
+	// 			this._category.classList.add('card__category_other')
+	// 			break;
+	// 	}
+	// }
 
-	set category(category: string) {
-		if (this._category) this._category.textContent = category;
-	}
-
-	set description(description: string) {
-		this._description.textContent = description;
-	}
-
-	set index(index: number) {
-		this._index.textContent = String(index);
-	}
+	// set index(index: number) {
+	// 	this._index.textContent = String(index);
+	// }
 
 	set id(id: string) {
 		this._id = id;
-	}
-
-	get id() {
-		return this._id;
 	}
 }

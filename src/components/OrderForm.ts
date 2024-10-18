@@ -6,7 +6,7 @@ interface IOrederForm{
   content: HTMLElement;
 }
 
-export class Order extends Form<IOrederForm>{
+export class OrderForm extends Form<IOrederForm>{
   protected _payment: NodeListOf<HTMLButtonElement>;
   
 
@@ -14,9 +14,21 @@ export class Order extends Form<IOrederForm>{
     super(container, events);
     this._payment = this.container.querySelectorAll('.button_alt');
     
+    
     this._payment.forEach(item => item.addEventListener('click', () => {
-      const name = item.name
-      this.events.emit(`payment:change`,  {item: name}  );
+      this.events.emit(`payment:change`,  {item: item.name}  );
     }))
   }
+
+  togglePaymant(data: string){
+    this._payment.forEach((item) => {
+      if(item.name === data){
+        item.classList.replace('button_alt', 'button_alt-active')
+      } else{
+        item.classList.replace('button_alt-active', 'button_alt')
+      }
+    })
+  }
+
 }
+

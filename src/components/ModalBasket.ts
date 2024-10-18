@@ -1,3 +1,4 @@
+import { IProductItem } from "../types";
 import { Component } from "./base/Component";
 import { IEvents } from "./base/events";
 
@@ -7,33 +8,27 @@ interface IModalBasket{
 
 export class ModalBasket extends Component<IModalBasket>{
 
-  protected _catalog: HTMLElement;
-  protected _basketButton: HTMLButtonElement;
-  protected _basketPrice: HTMLElement;
+  protected catalog: HTMLElement;
+  protected basketButton: HTMLButtonElement;
+  protected basketPrice: HTMLElement;
 
   constructor(protected container: HTMLElement,protected events: IEvents){
     super(container)
-    this._catalog = this.container.querySelector('.basket__list');
-    this._basketButton = this.container.querySelector('.basket__button');
-    this._basketPrice = this.container.querySelector('.basket__price');
+    this.catalog = this.container.querySelector('.basket__list');
+    this.basketButton = this.container.querySelector('.basket__button');
+    this.basketPrice = this.container.querySelector('.basket__price');
 
-    this._basketButton?.addEventListener('click', (evt) => {
+    this.basketButton?.addEventListener('click', (evt) => {
 			evt.preventDefault();
 			this.events.emit(`basket:submit`);
 		})
   }
-
-  set catalog(items: HTMLElement[]) {
-		this._catalog.replaceChildren(...items);
-	}
-
-  set total(total: number){
-    this._basketPrice.textContent = `${String(total)} синапсов`;
+  setBasket(productData: HTMLElement[]) {
+    if (!productData) return this.container;
+		this.catalog.replaceChildren(...productData);
   }
 
-  deleteItems(id:HTMLElement){
-    this._catalog.removeChild(id);
-    super.render()
+  setTotal(value: number){
+    this.basketPrice.textContent = `${String(value)} синапсов`
   }
-
 }

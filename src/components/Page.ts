@@ -27,8 +27,8 @@ export class Page extends Component<IPage> {
 		this._catalog.replaceChildren(...items);
 	}
 
-	set counter(total: string) {
-		this._counter.textContent = total;
+	set counter(total: number) {
+		this._counter.textContent = String(total);
 	}
 
 	set locked(value: boolean) {

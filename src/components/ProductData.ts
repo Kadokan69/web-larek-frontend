@@ -1,30 +1,26 @@
 import { IProductData, IProductItem } from '../types';
 import { IEvents } from './base/events';
 
-export class ProductData implements IProductData {
-	total: number;
-	items: IProductItem[];
-	preview: string | null;
-	events: IEvents;
+export class ProductData{
+	protected total: number;
+	protected catalog: IProductItem[];
+	protected priseTotal: number;
+	
 
-	constructor(events: IEvents) {
-		this.events = events;
+	constructor(protected events: IEvents) {}
+
+	setProduct(items: IProductItem[]){
+		this.catalog = items;		
 	}
 
-	getProduct(productId: string) {
-		return this.items.find((item) => item.id === productId);
+	getProduct(){
+		return this.catalog
 	}
 
-	set productCard(data: IProductItem[]) {
-		this.items = data;
-		this.events.emit('product:load');
+	getTotal(product: IProductItem[]){
+		let totalPrise = 0;
+		product.forEach(item => totalPrise = totalPrise + item.price)
+		return totalPrise
 	}
 
-	set productTotal(data: number) {
-		this.total = data;
-	}
-
-	get productCard() {
-		return this.items;
-	}
 }

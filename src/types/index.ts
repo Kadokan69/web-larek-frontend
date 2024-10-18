@@ -5,6 +5,8 @@ export interface IProductItem{
   title: string;
   category: string;
   price: number | null;
+  preview?: boolean;
+  inBasket?: boolean;
 }
 
 export interface IOrder{
@@ -19,7 +21,7 @@ export interface IOrder{
 export interface IProductData{
   total: number;
   items: IProductItem[];
-  preview?: string | null;
+  // preview?: string | null;
   // getProduct(productId: string): IProductItem;
 }
 
@@ -33,6 +35,8 @@ export type TProductItemId = Pick<IProductItem, "id">
 export type TOrderForm = Pick<IOrder, "payment"|"address">
 
 export type TApiPostMethod = 'POST' | 'PUT' | 'DELETE' | 'PATCH'
+
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
 export interface IApi {
   baseUrl: string;
