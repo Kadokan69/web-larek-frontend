@@ -1,26 +1,24 @@
 import { IProductData, IProductItem } from '../types';
 import { IEvents } from './base/events';
 
-export class ProductData{
+export class ProductData {
 	protected total: number;
 	protected catalog: IProductItem[];
 	protected priseTotal: number;
-	
 
 	constructor(protected events: IEvents) {}
 
-	setProduct(items: IProductItem[]){
-		this.catalog = items;		
+	setProduct(items: IProductItem[]) {
+		this.catalog = items;
 	}
 
-	getProduct(){
-		return this.catalog
+	getProduct() {
+		return this.catalog;
 	}
 
-	getTotal(product: IProductItem[]){
+	getTotal(product: IProductItem[]) {
 		let totalPrise = 0;
-		product.forEach(item => totalPrise = totalPrise + item.price)
-		return totalPrise
+		product.forEach((item) => (totalPrise = totalPrise + item.price));
+		return totalPrise;
 	}
-
 }

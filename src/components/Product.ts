@@ -15,9 +15,8 @@ export class Product extends Component<IProductItem> {
 	protected _index?: HTMLElement;
 	protected _delete?: HTMLElement;
 	protected _inBasket?: boolean;
-	
 
-	constructor(protected container: HTMLElement,protected events: IEvents) {
+	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
 		this._description = this.container.querySelector('.card__text');
 		this._image = this.container.querySelector('.card__image');
@@ -52,33 +51,33 @@ export class Product extends Component<IProductItem> {
 
 		const { description, image, category, inBasket, ...data } = productData;
 		if (this._image) (this._image.src = image), (this._image.alt = data.title);
-		if(this._category){
+		if (this._category) {
 			this._category.textContent = category;
-		switch (category) {
-			case 'софт-скил':
-				this._category.classList.add('card__category_soft')
-				break;
-			case 'дополнительное':
-				this._category.classList.add('card__category_additional')
-				break;
-			case 'кнопка':
-				this._category.classList.add('card__category_button')
-				break;
-			case 'хард-скил':
-				this._category.classList.add('card__category_hard')
-				break;
-			default:
-				this._category.classList.add('card__category_other')
-				break;
+			switch (category) {
+				case 'софт-скил':
+					this._category.classList.add('card__category_soft');
+					break;
+				case 'дополнительное':
+					this._category.classList.add('card__category_additional');
+					break;
+				case 'кнопка':
+					this._category.classList.add('card__category_button');
+					break;
+				case 'хард-скил':
+					this._category.classList.add('card__category_hard');
+					break;
+				default:
+					this._category.classList.add('card__category_other');
+					break;
+			}
 		}
-		};
-		if(inBasket){
-			if(this._button) this._button.disabled = true;
+		if (inBasket) {
+			if (this._button) this._button.disabled = true;
 		}
-		
+
 		return super.render(data);
 	}
-	
+
 	set price(price: number) {
 		if (price === null) {
 			this._price.textContent = `Бесценно`;
@@ -88,7 +87,7 @@ export class Product extends Component<IProductItem> {
 		}
 	}
 
-	set index(index: number){
+	set index(index: number) {
 		this._index.textContent = String(index + 1);
 	}
 
@@ -96,7 +95,6 @@ export class Product extends Component<IProductItem> {
 		this._title.textContent = title;
 	}
 
-	
 	// set category(category: string) {
 	// 	this._category.textContent = category;
 	// 	switch (category) {

@@ -3,7 +3,7 @@ import { Component } from '../base/Component';
 import { IEvents } from '../base/events';
 
 interface IFormData {
-	content: HTMLElement| HTMLElement[];
+	content: HTMLElement | HTMLElement[];
 }
 
 export class Modal extends Component<IFormData> {
