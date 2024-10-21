@@ -1,4 +1,4 @@
-import { IApi, IOrder, IProductItem, IProductData } from '../types';
+import { IOrder, IProductItem} from '../types';
 import { ApiListResponse, Api } from './base/api';
 
 export interface IAuctionAPI {

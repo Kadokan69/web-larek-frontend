@@ -2,7 +2,7 @@ import { Component } from '../base/Component';
 import { IEvents } from '../base/events';
 
 export abstract class Form<T> extends Component<T> {
-	protected _inputs: NodeListOf<HTMLInputElement>;
+	protected inputs: NodeListOf<HTMLInputElement>;
 	protected formName: string;
 	protected errors: HTMLElement;
 	protected modalActions: HTMLElement;
@@ -10,7 +10,7 @@ export abstract class Form<T> extends Component<T> {
 
 	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
-		this._inputs = this.container.querySelectorAll<HTMLInputElement>('.form__input');
+		this.inputs = this.container.querySelectorAll<HTMLInputElement>('.form__input');
 		this.modalActions = this.container.querySelector('.modal__actions');
 		this.submitButton = this.modalActions.querySelector('.button');
 		this.formName = this.container.getAttribute('name');
@@ -28,7 +28,7 @@ export abstract class Form<T> extends Component<T> {
 	}
 	protected getInputValues() {
 		const valuesObject: Record<string, string> = {};
-		this._inputs.forEach((element) => {
+		this.inputs.forEach((element) => {
 			valuesObject[element.name] = element.value;
 		});
 		return valuesObject;
@@ -42,6 +42,6 @@ export abstract class Form<T> extends Component<T> {
 	}
 
 	reset() {
-		this._inputs.forEach((item) => (item.value = null));
+		this.inputs.forEach((item) => (item.value = null));
 	}
 }

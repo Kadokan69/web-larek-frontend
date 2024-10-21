@@ -49,11 +49,11 @@ api.getProduct().then((res) => {
 
 //Добавление товаров на страницу
 events.on('initialData: loaded', () => {
-	const catalog = productData.getProduct().map((item) => {
+	const catalogi = productData.getProduct().map((item) => {
 		const product = new Product(cloneTemplate(productTemplateCatalog), events);
 		return product.render(item);
 	});
-	page.render({ catalog: catalog });
+	page.render({ _catalog: catalogi });
 });
 
 //Модальное окно с товаром
@@ -67,7 +67,7 @@ events.on('product:select', (product: { id: string }) => {
 events.on('product:submit', (product: { id: string }) => {
 	productData.getProduct().find((item) => item.id === product.id).inBasket = true;
 	const productModal = new Product(cloneTemplate(productPreviewTemplate), events);
-	page.counter = productData.getProduct().filter((item) => item.inBasket === true).length;
+	page._counter = productData.getProduct().filter((item) => item.inBasket === true).length;
 	modal.render({ content: productModal.render(productData.getProduct().find((item) => item.id === product.id)) });
 });
 
@@ -76,7 +76,7 @@ events.on('basket:open', () => {
 	const productItem = productData.getProduct().filter((item) => item.inBasket === true);
 	const products = productItem.map((item) => {
 		const productModal = new Product(cloneTemplate(productBasketTemplate), events);
-		productModal.index = productItem.findIndex((items) => items.id === item.id);
+		productModal._index = productItem.findIndex((items) => items.id === item.id);
 		return productModal.render(item);
 	});
 	basket.setTotal(productData.getTotal(productItem));
@@ -91,25 +91,23 @@ events.on('basket:delete', (product: { id: string }) => {
 	const productItem = productData.getProduct().filter((item) => item.inBasket === true);
 	const products = productItem.map((item) => {
 		const productModal = new Product(cloneTemplate(productBasketTemplate), events);
-		productModal.index = productItem.findIndex((items) => items.id === item.id);
+		productModal._index = productItem.findIndex((items) => items.id === item.id);
 		return productModal.render(item);
 	});
 	basket.setTotal(productData.getTotal(productItem));
 	basket.setBasket(products);
 	basket.toggleButton(productItem);
-	page.counter = productData.getProduct().filter((item) => item.inBasket === true).length;
+	page._counter = productData.getProduct().filter((item) => item.inBasket === true).length;
 	modal.render({ content: basket.render() });
 });
 
 //Переход к оформлению заказ
 events.on('basket:submit', () => {
 	const product = productData.getProduct().filter((item) => item.inBasket === true);
-	orderData.items = product.map((item) => {
-		return item.id;
-	});
-	orderData.total = productData.getTotal(product);
+	orderData.setItems(product.map((item) =>  {return item.id}))
+	orderData.setTotal(productData.getTotal(product));
 	orderData.checkValidOrder();
-	orderForm.togglePaymant(orderData.payment);
+	orderForm.togglePaymant(orderData.getPayment());
 	modal.render({ content: orderForm.render() });
 });
 
@@ -117,7 +115,7 @@ events.on('basket:submit', () => {
 events.on('order:input', (data) => {
 	Object.assign(orderData, data);
 	orderData.checkValidOrder();
-	orderForm.togglePaymant(orderData.payment);
+	orderForm.togglePaymant(orderData.getPayment());
 });
 
 //Переход к форме контактов
@@ -150,7 +148,7 @@ events.on('contacts:submit', () => {
 		.setOrder(orderData.getOrder())
 		.then((res) => {
 			productData.getProduct().forEach((item) => (item.inBasket = false));
-			page.counter = productData.getProduct().filter((item) => item.inBasket === true).length;
+			page._counter = productData.getProduct().filter((item) => item.inBasket === true).length;
 			orderForm.reset();
 			contactForm.reset();
 			orderData.reset();
@@ -162,7 +160,7 @@ events.on('contacts:submit', () => {
 
 //Открытие модального окна с подтверждением заказа
 events.on('order:success', (res: { id: string; total: number }) => {
-	success.total = res.total;
+	success._total = res.total;
 	modal.render({ content: success.render() });
 });
 

@@ -1,10 +1,9 @@
-import { IProductData, IProductItem } from '../types';
+import { IProductItem } from '../types';
 import { IEvents } from './base/events';
 
 export class ProductData {
 	protected total: number;
 	protected catalog: IProductItem[];
-	protected priseTotal: number;
 
 	constructor(protected events: IEvents) {}
 
@@ -16,9 +15,9 @@ export class ProductData {
 		return this.catalog;
 	}
 
-	getTotal(product: IProductItem[]) {
+	getTotal(items: IProductItem[]) {
 		let totalPrise = 0;
-		product.forEach((item) => (totalPrise = totalPrise + item.price));
+		items.forEach((item) => (totalPrise = totalPrise + item.price));
 		return totalPrise;
 	}
 }
