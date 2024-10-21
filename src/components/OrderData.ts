@@ -10,15 +10,15 @@ export class OrderData {
 
 	constructor(protected events: IEvents) {}
 
-	setItems(item: string[]){
+	setItems(item: string[]) {
 		this.items = item;
 	}
 
-	setTotal(value: number){
+	setTotal(value: number) {
 		this.total = value;
 	}
 
-	getPayment(){
+	getPayment() {
 		return this.payment;
 	}
 

@@ -6,29 +6,27 @@ interface IPage {
 }
 
 export class Page extends Component<IPage> {
-	protected catalog: HTMLElement;
-	protected page: HTMLElement;
-	protected basket: HTMLButtonElement;
-	protected counter: HTMLElement;
+	protected _catalog: HTMLElement;
+	protected _basket: HTMLButtonElement;
+	protected _counter: HTMLElement;
 
 	constructor(protected container: HTMLElement, events: IEvents) {
 		super(container);
-		this.page = container;
-		this.basket = this.container.querySelector('.header__basket');
-		this.counter = this.container.querySelector('.header__basket-counter');
-		this.catalog = this.container.querySelector('.gallery');
+		this._basket = this.container.querySelector('.header__basket');
+		this._counter = this.container.querySelector('.header__basket-counter');
+		this._catalog = this.container.querySelector('.gallery');
 
-		this.basket.addEventListener('click', () => {
+		this._basket.addEventListener('click', () => {
 			events.emit('basket:open');
 		});
 	}
 
-	set _catalog(items: HTMLElement[]) {
-		this.catalog.replaceChildren(...items);
+	set catalog(items: HTMLElement[]) {
+		this._catalog.replaceChildren(...items);
 	}
 
-	set _counter(total: number) {
-		this.counter.textContent = String(total);
+	set counter(total: number) {
+		this._counter.textContent = String(total);
 	}
 
 	set locked(value: boolean) {

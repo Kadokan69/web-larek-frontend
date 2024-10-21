@@ -6,20 +6,20 @@ interface ISuccess {
 }
 
 export class Success extends Component<ISuccess> {
-	protected total: HTMLElement;
-	protected button: HTMLButtonElement;
+	protected _total: HTMLElement;
+	protected _button: HTMLButtonElement;
 
 	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
-		this.total = this.container.querySelector('.order-success__description');
-		this.button = this.container.querySelector('.order-success__close');
+		this._total = this.container.querySelector('.order-success__description');
+		this._button = this.container.querySelector('.order-success__close');
 
-		this.button.addEventListener('click', (evt) => {
+		this._button.addEventListener('click', () => {
 			this.events.emit(`success:submit`);
 		});
 	}
 
-	set _total(total: number) {
-		this.total.textContent = `Списано ${String(total)} синапсов`;
+	set total(total: number) {
+		this._total.textContent = `Списано ${String(total)} синапсов`;
 	}
 }

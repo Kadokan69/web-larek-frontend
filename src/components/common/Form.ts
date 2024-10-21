@@ -2,46 +2,45 @@ import { Component } from '../base/Component';
 import { IEvents } from '../base/events';
 
 export abstract class Form<T> extends Component<T> {
-	protected inputs: NodeListOf<HTMLInputElement>;
-	protected formName: string;
-	protected errors: HTMLElement;
-	protected modalActions: HTMLElement;
-	protected submitButton: HTMLButtonElement;
+	protected _inputs: NodeListOf<HTMLInputElement>;
+	protected _formName: string;
+	protected _modalActions: HTMLElement;
+	protected _submitButton: HTMLButtonElement;
 
 	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
-		this.inputs = this.container.querySelectorAll<HTMLInputElement>('.form__input');
-		this.modalActions = this.container.querySelector('.modal__actions');
-		this.submitButton = this.modalActions.querySelector('.button');
-		this.formName = this.container.getAttribute('name');
+		this._inputs = this.container.querySelectorAll<HTMLInputElement>('.form__input');
+		this._modalActions = this.container.querySelector('.modal__actions');
+		this._submitButton = this._modalActions.querySelector('.button');
+		this._formName = this.container.getAttribute('name');
 
 		this.container.addEventListener('submit', (evt) => {
 			evt.preventDefault();
-			this.events.emit(`${this.formName}:submit`, this.getInputValues());
+			this.events.emit(`${this._formName}:submit`, this.getInputValues());
 		});
 		this.container.addEventListener('input', (event: InputEvent) => {
 			const target = event.target as HTMLInputElement;
 			const field = target.name;
 			const value = target.value;
-			this.events.emit(`${this.formName}:input`, { [field]: value });
+			this.events.emit(`${this._formName}:input`, { [field]: value });
 		});
 	}
 	protected getInputValues() {
 		const valuesObject: Record<string, string> = {};
-		this.inputs.forEach((element) => {
+		this._inputs.forEach((element) => {
 			valuesObject[element.name] = element.value;
 		});
 		return valuesObject;
 	}
 
 	isValid() {
-		this.submitButton.disabled = false;
+		this._submitButton.disabled = false;
 	}
 	noValid() {
-		this.submitButton.disabled = true;
+		this._submitButton.disabled = true;
 	}
 
 	reset() {
-		this.inputs.forEach((item) => (item.value = null));
+		this._inputs.forEach((item) => (item.value = null));
 	}
 }

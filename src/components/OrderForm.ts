@@ -6,12 +6,12 @@ interface IOrederForm {
 }
 
 export class OrderForm extends Form<IOrederForm> {
-	protected payment: NodeListOf<HTMLButtonElement>;
+	protected _payment: NodeListOf<HTMLButtonElement>;
 
 	constructor(container: HTMLElement, protected events: IEvents) {
 		super(container, events);
-		this.payment = this.container.querySelectorAll('.button_alt');
-		this.payment.forEach((item) =>
+		this._payment = this.container.querySelectorAll('.button_alt');
+		this._payment.forEach((item) =>
 			item.addEventListener('click', () => {
 				this.events.emit(`order:input`, { payment: item.name });
 			})
@@ -19,7 +19,7 @@ export class OrderForm extends Form<IOrederForm> {
 	}
 
 	togglePaymant(data: string) {
-		this.payment.forEach((item) => {
+		this._payment.forEach((item) => {
 			if (item.name === data) {
 				item.classList.replace('button_alt', 'button_alt-active');
 			} else {

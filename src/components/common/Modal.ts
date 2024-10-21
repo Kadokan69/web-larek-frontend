@@ -7,22 +7,22 @@ interface IFormData {
 }
 
 export class Modal extends Component<IFormData> {
-	protected content: HTMLElement;
-	protected buttonClose: HTMLButtonElement;
+	protected _content: HTMLElement;
+	protected _buttonClose: HTMLButtonElement;
 
 	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
 
-		this.buttonClose = ensureElement<HTMLButtonElement>('.modal__close', container);
-		this.content = ensureElement<HTMLElement>('.modal__content', container);
+		this._buttonClose = ensureElement<HTMLButtonElement>('.modal__close', container);
+		this._content = ensureElement<HTMLElement>('.modal__content', container);
 
-		this.buttonClose.addEventListener('click', this.close.bind(this));
+		this._buttonClose.addEventListener('click', this.close.bind(this));
 		this.container.addEventListener('click', this.close.bind(this));
-		this.content.addEventListener('click', (event) => event.stopPropagation());
+		this._content.addEventListener('click', (event) => event.stopPropagation());
 	}
 
-	set _content(value: HTMLElement) {
-		this.content.replaceChildren(value);
+	set content(value: HTMLElement) {
+		this._content.replaceChildren(value);
 	}
 
 	open() {
@@ -32,7 +32,6 @@ export class Modal extends Component<IFormData> {
 
 	close() {
 		this.container.classList.remove('modal_active');
-		this.content = null;
 		this.events.emit('modal:close');
 	}
 
