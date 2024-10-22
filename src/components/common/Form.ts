@@ -1,3 +1,4 @@
+import { ensureElement } from '../../utils/utils';
 import { Component } from '../base/Component';
 import { IEvents } from '../base/events';
 
@@ -6,6 +7,7 @@ export abstract class Form<T> extends Component<T> {
 	protected _formName: string;
 	protected _modalActions: HTMLElement;
 	protected _submitButton: HTMLButtonElement;
+	protected _errors: HTMLElement;
 
 	constructor(protected container: HTMLElement, protected events: IEvents) {
 		super(container);
@@ -13,6 +15,7 @@ export abstract class Form<T> extends Component<T> {
 		this._modalActions = this.container.querySelector('.modal__actions');
 		this._submitButton = this._modalActions.querySelector('.button');
 		this._formName = this.container.getAttribute('name');
+		this._errors = this.container.querySelector('.form__errors');
 
 		this.container.addEventListener('submit', (evt) => {
 			evt.preventDefault();
@@ -35,9 +38,11 @@ export abstract class Form<T> extends Component<T> {
 
 	isValid() {
 		this._submitButton.disabled = false;
+		this._errors.textContent = '';
 	}
 	noValid() {
 		this._submitButton.disabled = true;
+		this._errors.textContent = 'Поля должны быть заполнены';
 	}
 
 	reset() {

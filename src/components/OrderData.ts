@@ -8,6 +8,7 @@ export class OrderData {
 	protected total: number;
 	protected items: string[];
 
+
 	constructor(protected events: IEvents) {}
 
 	setItems(item: string[]) {
@@ -24,17 +25,17 @@ export class OrderData {
 
 	checkValidOrder() {
 		if (this.payment.length !== 0 && this.address.length !== 0) {
-			this.events.emit('form:valid', this);
+			this.events.emit('formOrder:valid');
 		} else {
-			this.events.emit('form:novalid');
+			this.events.emit('formOrder:novalid');
 		}
 	}
 
 	checkValidContact() {
 		if (this.email.length !== 0 && this.phone.length !== 0) {
-			this.events.emit('form:valid');
+			this.events.emit('formContact:valid');
 		} else {
-			this.events.emit('form:novalid');
+			this.events.emit('formContact:novalid');
 		}
 	}
 
@@ -57,4 +58,5 @@ export class OrderData {
 		this.total = null;
 		this.items = [];
 	}
+
 }

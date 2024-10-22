@@ -110,8 +110,6 @@ events.on('basket:submit', () => {
 		})
 	);
 	orderData.setTotal(productData.getTotal(product));
-	orderData.checkValidOrder();
-	orderForm.togglePaymant(orderData.getPayment());
 	modal.render({ content: orderForm.render() });
 });
 
@@ -124,7 +122,6 @@ events.on('order:input', (data) => {
 
 //Переход к форме контактов
 events.on('order:submit', () => {
-	orderData.checkValidContact();
 	modal.render({ content: contactForm.render() });
 });
 
@@ -135,14 +132,22 @@ events.on('contacts:input', (data) => {
 });
 
 //Включение кнопки оформелния заказа
-events.on('form:valid', () => {
+events.on('formOrder:valid', () => {
 	orderForm.isValid();
-	contactForm.isValid();
 });
 
 //Отключение кнопки оформления заказа
-events.on('form:novalid', () => {
+events.on('formOrder:novalid', () => {
 	orderForm.noValid();
+});
+
+//Включение кнопки в форме с контактами
+events.on('formContact:valid', () => {
+	contactForm.isValid();
+});
+
+//Отключение кнопки в форме с контактами
+events.on('formContact:novalid', () => {
 	contactForm.noValid();
 });
 
