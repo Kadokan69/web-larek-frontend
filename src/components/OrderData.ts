@@ -8,7 +8,6 @@ export class OrderData {
 	protected total: number;
 	protected items: string[];
 
-
 	constructor(protected events: IEvents) {}
 
 	setItems(item: string[]) {
@@ -58,5 +57,4 @@ export class OrderData {
 		this.total = null;
 		this.items = [];
 	}
-
 }
