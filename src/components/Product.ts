@@ -48,6 +48,7 @@ export class Product extends Component<IProductItem> {
 		if (!productData) return this.container;
 
 		const { description, image, category, inBasket, ...data } = productData;
+		if(this._description) this._description.textContent = description;
 		if (this._image) (this._image.src = image), (this._image.alt = data.title);
 		if (this._category) {
 			this._category.textContent = category;
