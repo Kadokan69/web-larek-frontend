@@ -276,3 +276,6 @@ interface IProductData{
 - `success:submit` - Кнопка закрытия окна подтверждения заказа
 - `modal:open` - Открытие модального окна
 - `modal:close` - Закрытие модального окна
+
+### Ссылка на страницу проекта
+[https://kadokan69.github.io/web-larek-frontend/] (https://kadokan69.github.io/web-larek-frontend/) 
