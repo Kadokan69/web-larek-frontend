@@ -278,4 +278,4 @@ interface IProductData{
 - `modal:close` - Закрытие модального окна
 
 ### Ссылка на страницу проекта
-[https://kadokan69.github.io/web-larek-frontend/] (https://kadokan69.github.io/web-larek-frontend/) 
+<https://kadokan69.github.io/web-larek-frontend/>
